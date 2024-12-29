@@ -50,8 +50,8 @@ variable "app_alb_sg_tags" {
     }
 }
 
-# variable "vpn_sg_tags" {
-#     default = {
-#         component = "vpn"
-#     }
-# }
+variable "vpn_sg_tags" {
+    default = {
+        component = "vpn"
+    }
+}
