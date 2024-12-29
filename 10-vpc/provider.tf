@@ -7,10 +7,10 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "81s-remote-state"
+    bucket = "terraform-infra-remote-state"
     key = "expense-vpc-dev" # using this key we do terraform init, while practicing if u change this key we need to reconfigre--- terraform init -reconfigure
     region = "us-east-1"
-    dynamodb_table = "81s-locking"
+    dynamodb_table = "terraform-infra-locking"
   }
 }
 
