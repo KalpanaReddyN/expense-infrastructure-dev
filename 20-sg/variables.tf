@@ -32,11 +32,11 @@ variable "frontend_sg_tags" {
     }
 }
 
-# variable "bastion_sg_tags" {
-#     default = {
-#         component = "bastion"
-#     }
-# }
+variable "bastion_sg_tags" {
+    default = {
+        component = "bastion"
+    }
+}
 
 # variable "ansible_sg_tags" {
 #     default = {
