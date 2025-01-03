@@ -29,7 +29,6 @@ resource "null_resource" "backend" {
     type = "ssh"
     user = "ec2-user"
     password = "DevOps321"
-    timeout = "5m"
   }
 
   provisioner "file" {
