@@ -100,79 +100,80 @@ resource "aws_launch_template" "backend" {
   tag_specifications {
     resource_type = "instance"
 
-    tags = {
+    tags = { 
       Name = local.resource_name
     }
   }
 }
 
-# resource "aws_autoscaling_group" "backend" {
-#   name                      = local.resource_name
-#   max_size                  = 10
-#   min_size                  = 2
-#   health_check_grace_period = 60
-#   health_check_type         = "ELB"
-#   desired_capacity          = 2 # starting of the auto scaling group
-#   target_group_arns = [aws_lb_target_group.backend.arn]
-#   #force_delete              = true
-#   launch_template {
-#     id      = aws_launch_template.backend.id
-#     version = "$Latest"
-#   }
+resource "aws_autoscaling_group" "backend" {
+  name                      = local.resource_name
+  max_size                  = 10
+  min_size                  = 2
+  health_check_grace_period = 60
+  health_check_type         = "ELB"
+  desired_capacity          = 2 # starting of the auto scaling group
+  target_group_arns = [aws_lb_target_group.backend.arn]
+  #force_delete              = true
+  launch_template {
+    id      = aws_launch_template.backend.id
+    version = "$Latest"
+  }
   
-#   vpc_zone_identifier       = [local.private_subnet_id]
+  vpc_zone_identifier       = [local.private_subnet_id]
 
-#   instance_refresh {
-#     strategy = "Rolling"
-#     preferences {
-#       min_healthy_percentage = 50
-#     }
-#     triggers = ["launch_template"]
-#   }
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+    triggers = ["launch_template"]
+  }
 
-#   tag {
-#     key                 = "Name"
-#     value               = local.resource_name
-#     propagate_at_launch = true
-#   }
+  tag {
+    key                 = "Name"
+    value               = local.resource_name
+    propagate_at_launch = true
+  }
 
-#   # If instances are not healthy with in 15min, autoscaling will delete that instance
-#   timeouts {
-#     delete = "15m"
-#   }
+  # If instances are not healthy with in 15min, autoscaling will delete that instance
+  timeouts {
+    delete = "15m"
+  }
 
-#   tag {
-#     key                 = "Project"
-#     value               = "Expense"
-#     propagate_at_launch = false
-#   }
-# }
+  tag {
+    key                 = "Project"
+    value               = "Expense"
+    propagate_at_launch = false
+  }
+}
 
-# resource "aws_autoscaling_policy" "example" {
-#   name = local.resource_name
-#   policy_type            = "TargetTrackingScaling"
-#   autoscaling_group_name  = aws_autoscaling_group.backend.name
-#   target_tracking_configuration {
-#     predefined_metric_specification {
-#       predefined_metric_type = "ASGAverageCPUUtilization"
-#     }
+resource "aws_autoscaling_policy" "example" {
+  name = local.resource_name
+  policy_type            = "TargetTrackingScaling"
+  autoscaling_group_name  = aws_autoscaling_group.backend.name
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
 
-#     target_value = 70.0
-#   }
-# }
+    target_value = 70.0
+  }
+}
 
-# resource "aws_lb_listener_rule" "backend" {
-#   listener_arn = local.app_alb_listener_arn
-#   priority     = 100 # low priority will be evaluated first
+resource "aws_lb_listener_rule" "backend" {
+  listener_arn = local.app_alb_listener_arn
+  priority     = 100 # low priority will be evaluated first
 
-#   action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.backend.arn
-#   }
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.backend.arn
+  }
 
-#   condition {
-#     host_header {
-#       values = ["${var.backend_tags.Component}.app-${var.environment}.${var.zone_name}"]
-#     }
-#   }
-# }
+  condition {
+    host_header {
+      values = ["${var.backend_tags.Component}.app-${var.environment}.${var.zone_name}"]
+    }
+  }
+}
+
