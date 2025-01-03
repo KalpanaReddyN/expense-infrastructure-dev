@@ -29,21 +29,20 @@ resource "null_resource" "backend" {
     type = "ssh"
     user = "ec2-user"
     password = "DevOps321"
+    timeout = "5m"
   }
 
   provisioner "file" {
-    source      = "${var.backend_tags.Component}.sh"
+    source      = "${var.backend_tags.Component}.sh"   # instead can give backend.sh
     destination = "/tmp/backend.sh"
   }
 
   provisioner "remote-exec" {
-    # Bootstrap script called with private_ip of each node in the cluster
     inline = [
       "chmod +x /tmp/backend.sh",
       "sudo sh /tmp/backend.sh ${var.backend_tags.Component} ${var.environment}"
     ]
   }
-
 }
 
 # resource "aws_ec2_instance_state" "backend" {
