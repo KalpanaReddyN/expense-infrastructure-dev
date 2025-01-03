@@ -56,36 +56,36 @@ resource "aws_ami_from_instance" "backend" {
   depends_on = [aws_ec2_instance_state.backend]
 }
 
-# resource "null_resource" "backend_delete" {
-#   # Changes to any instance of the cluster requires re-provisioning
-#   triggers = {
-#     instance_id = module.backend.id
-#   }
+resource "null_resource" "backend_delete" {
+  # Changes to any instance of the cluster requires re-provisioning
+  triggers = {
+    instance_id = module.backend.id
+  }
 
-#   provisioner "local-exec" {
-#     command = "aws ec2 terminate-instances --instance-ids ${module.backend.id}"
-#   }
+  provisioner "local-exec" {
+    command = "aws ec2 terminate-instances --instance-ids ${module.backend.id}"
+  }
 
-#   depends_on = [aws_ami_from_instance.backend]
-# }
+  depends_on = [aws_ami_from_instance.backend]
+}
 
-# resource "aws_lb_target_group" "backend" {
-#   name     = local.resource_name
-#   port     = 8080
-#   protocol = "HTTP"
-#   vpc_id   = local.vpc_id
+resource "aws_lb_target_group" "backend" {
+  name     = local.resource_name
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = local.vpc_id
 
-#   health_check {
-#     healthy_threshold = 2
-#     unhealthy_threshold = 2
-#     interval = 5
-#     matcher = "200-299"
-#     path = "/health"
-#     port = 8080
-#     protocol = "HTTP"
-#     timeout = 4
-#   }
-# }
+  health_check {
+    healthy_threshold = 2
+    unhealthy_threshold = 2
+    interval = 5
+    matcher = "200-299"
+    path = "/health"
+    port = 8080
+    protocol = "HTTP"
+    timeout = 4
+  }
+}
 
 # resource "aws_launch_template" "backend" {
 
