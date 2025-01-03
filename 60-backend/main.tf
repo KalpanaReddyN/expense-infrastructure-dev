@@ -87,24 +87,24 @@ resource "aws_lb_target_group" "backend" {
   }
 }
 
-# resource "aws_launch_template" "backend" {
+resource "aws_launch_template" "backend" {
 
-#   name = local.resource_name
-#   image_id = aws_ami_from_instance.backend.id
-#   instance_initiated_shutdown_behavior = "terminate"
-#   instance_type = "t3.micro"
+  name = local.resource_name
+  image_id = aws_ami_from_instance.backend.id
+  instance_initiated_shutdown_behavior = "terminate"
+  instance_type = "t3.micro"
   
-#   update_default_version = true
-#   vpc_security_group_ids = [local.backend_sg_id]
+  update_default_version = true
+  vpc_security_group_ids = [local.backend_sg_id]
 
-#   tag_specifications {
-#     resource_type = "instance"
+  tag_specifications {
+    resource_type = "instance"
 
-#     tags = {
-#       Name = local.resource_name
-#     }
-#   }
-# }
+    tags = {
+      Name = local.resource_name
+    }
+  }
+}
 
 # resource "aws_autoscaling_group" "backend" {
 #   name                      = local.resource_name
