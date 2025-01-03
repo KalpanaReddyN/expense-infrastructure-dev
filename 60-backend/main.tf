@@ -44,11 +44,11 @@ resource "null_resource" "backend" {
   }
 }
 
-# resource "aws_ec2_instance_state" "backend" {
-#   instance_id = module.backend.id
-#   state       = "stopped"
-#   depends_on = [null_resource.backend]
-# }
+resource "aws_ec2_instance_state" "backend" {
+  instance_id = module.backend.id
+  state       = "stopped"
+  depends_on = [null_resource.backend]
+}
 
 # resource "aws_ami_from_instance" "backend" {
 #   name               = local.resource_name
