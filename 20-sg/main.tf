@@ -58,6 +58,16 @@ module "app_alb_sg" {
     sg_tags = var.app_alb_sg_tags
 }
 
+module "web_alb_sg" {
+    source = "git::https://github.com/KalpanaReddyN/terraform-aws-security-group.git?ref=main"
+    project_name = var.project_name
+    environment = var.environment
+    sg_name = "web-alb" #expense-dev-app-alb
+    vpc_id = local.vpc_id
+    common_tags = var.common_tags
+    sg_tags = var.web_alb_sg_tags
+}
+
 module "vpn_sg" {
     source = "../../terraform-aws-security-group"
     project_name = var.project_name  
