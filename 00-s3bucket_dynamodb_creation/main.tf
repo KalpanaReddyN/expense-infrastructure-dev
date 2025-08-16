@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "statefiles_bucket" {
-  bucket = "dev_infra_statefile"
+  bucket = "dev-infra-statefile"
 
   tags = {
     Name        = "My bucket"
