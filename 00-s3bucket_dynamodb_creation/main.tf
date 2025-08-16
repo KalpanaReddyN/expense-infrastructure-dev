@@ -140,7 +140,7 @@ resource "aws_s3_bucket_public_access_block" "statefiles_block_public" {
 # }
 
 resource "aws_s3_bucket_versioning" "statefiles_versioning" {
-  bucket = aws_s3_bucket.dev-infra-statefile.id
+  bucket = aws_s3_bucket.statefiles_bucket.id
   versioning_configuration {
     status = "Enabled"
   }
