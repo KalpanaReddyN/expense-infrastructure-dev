@@ -168,3 +168,19 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "statefiles_encryp
     }
   }
 }
+
+resource "aws_s3_bucket" "log_bucket" {
+  bucket = "dev-infra-statefile-logs"
+
+  tags = {
+    Name        = "My-bucket"
+    Environment = "Dev"
+  }
+}
+
+resource "aws_s3_bucket_logging" "logbucket" {
+  bucket = aws_s3_bucket.statefiles_bucket.id
+
+  target_bucket = aws_s3_bucket.log_bucket.id
+  target_prefix = "log/"
+}
