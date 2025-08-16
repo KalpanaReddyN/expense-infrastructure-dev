@@ -145,3 +145,26 @@ resource "aws_s3_bucket_versioning" "statefiles_versioning" {
     status = "Enabled"
   }
 }
+
+resource "aws_kms_key" "key_for_statefile" {
+  description             = "This key is used to encrypt bucket objects"
+  deletion_window_in_days = 7  # after 7 days key will be deleted so inorder to maintain the key use below
+  # enable_key_rotation     = true
+}
+
+resource "aws_kms_alias" "a" {
+  name          = "alias/key_for_statefile-alias"
+  target_key_id = aws_kms_key.key_for_statefile.key_id
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "statefiles_encryption" {
+  bucket = aws_s3_bucket.statefiles_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "aws:kms"
+      kms_master_key_id = aws_kms_alias.a.arn
+      
+    }
+  }
+}
