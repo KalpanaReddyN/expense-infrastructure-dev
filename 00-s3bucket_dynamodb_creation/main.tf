@@ -7,6 +7,7 @@ resource "aws_s3_bucket" "statefiles_bucket" {
   }
 }
 
+# this block of code is giving certain access to entire account
 resource "aws_s3_bucket_policy" "dev_statefile_policy" {
   bucket = aws_s3_bucket.statefiles_bucket.id
 
@@ -19,14 +20,15 @@ resource "aws_s3_bucket_policy" "dev_statefile_policy" {
         Principal = {
           AWS = "arn:aws:iam::211125410910:root"  # Replace with your AWS Account ID
         }
-        Action = [
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:DeleteObject",
-          "s3:ListBucket",
-          "s3:GetObjectTagging",
-          "s3:PutObjectTagging"
-        ]
+        Action = "s3:*"
+        # Action = [
+        #   "s3:GetObject",
+        #   "s3:PutObject",
+        #   "s3:DeleteObject",
+        #   "s3:ListBucket",
+        #   "s3:GetObjectTagging",
+        #   "s3:PutObjectTagging"
+        # ]
         Resource = [
           "arn:aws:s3:::dev-infra-statefile",
           "arn:aws:s3:::dev-infra-statefile/*"
@@ -36,6 +38,7 @@ resource "aws_s3_bucket_policy" "dev_statefile_policy" {
   })
 }
 
+# this block of code is giving certain access to certain users/roles
 # resource "aws_s3_bucket_policy" "dev_statefile_policy" {
 #   bucket = aws_s3_bucket.statefiles_bucket.id
 
