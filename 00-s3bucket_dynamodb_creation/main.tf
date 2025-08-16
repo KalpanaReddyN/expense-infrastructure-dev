@@ -114,7 +114,7 @@ resource "aws_s3_bucket_public_access_block" "statefiles_block_public" {
   restrict_public_buckets = true
 }
 
-
+# this code giving the access of bucket like get/list to the another aws account-123456789012
 # resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
 #   bucket = aws_s3_bucket.example.id
 #   policy = data.aws_iam_policy_document.allow_access_from_another_account.json
