@@ -36,6 +36,82 @@ resource "aws_s3_bucket_policy" "dev_statefile_policy" {
   })
 }
 
+# resource "aws_s3_bucket_policy" "dev_statefile_policy" {
+#   bucket = aws_s3_bucket.statefiles_bucket.id
+
+#   policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+
+#       # Full access for sunil
+#       {
+#         Sid       = "FullAccessForSunil"
+#         Effect    = "Allow"
+#         Principal = {
+#           AWS = "arn:aws:iam::211125410910:user/sunil"
+#         }
+#         Action = "s3:*"
+#         Resource = [
+#           "arn:aws:s3:::dev-infra-statefile",
+#           "arn:aws:s3:::dev-infra-statefile/*"
+#         ]
+#       },
+
+#       # Read-only for devops_user1
+#       {
+#         Sid       = "ReadOnlyForDevOpsUser1"
+#         Effect    = "Allow"
+#         Principal = {
+#           AWS = "arn:aws:iam::211125410910:user/devops_user1"
+#         }
+#         Action = "s3:GetObject"
+#         Resource = "arn:aws:s3:::dev-infra-statefile/*"
+#       },
+
+#       # Read + List for infra_admin
+#       {
+#         Sid       = "ReadListForInfraAdmin"
+#         Effect    = "Allow"
+#         Principal = {
+#           AWS = "arn:aws:iam::211125410910:user/infra_admin"
+#         }
+#         Action = [
+#           "s3:GetObject",
+#           "s3:ListBucket"
+#         ]
+#         Resource = [
+#           "arn:aws:s3:::dev-infra-statefile",
+#           "arn:aws:s3:::dev-infra-statefile/*"
+#         ]
+#       },
+
+#       # Read + Write for junior-devops role
+#       {
+#         Sid       = "ReadWriteForCIUser"
+#         Effect    = "Allow"
+#         Principal = {
+#           AWS = "arn:aws:iam::211125410910:role/junior-devops"
+#         }
+#         Action = [
+#           "s3:GetObject",
+#           "s3:PutObject"
+#         ]
+#         Resource = "arn:aws:s3:::dev-infra-statefile/*"
+#       }
+
+#     ]
+#   })
+# }
+
+resource "aws_s3_bucket_public_access_block" "statefiles_block_public" {
+  bucket                  = aws_s3_bucket.statefiles_bucket.id
+  block_public_acls       = true
+  ignore_public_acls      = true
+  block_public_policy     = true
+  restrict_public_buckets = true
+}
+
+
 # resource "aws_s3_bucket_policy" "allow_access_from_another_account" {
 #   bucket = aws_s3_bucket.example.id
 #   policy = data.aws_iam_policy_document.allow_access_from_another_account.json
