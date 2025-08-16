@@ -28,8 +28,8 @@ resource "aws_s3_bucket_policy" "dev_statefile_policy" {
           "s3:PutObjectTagging"
         ]
         Resource = [
-          "arn:aws:s3:::dev_infra_statefile",
-          "arn:aws:s3:::dev_infra_statefile/*"
+          "arn:aws:s3:::dev-infra-statefile",
+          "arn:aws:s3:::dev-infra-statefile/*"
         ]
       }
     ]
